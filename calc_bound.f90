@@ -1,26 +1,16 @@
 subroutine calc_bound
-    use variables, only: posx, posy, posz, xsyul, ysyul, zsyul
+    use variables
     use parameters
     implicit none
-    integer :: i
+    integer :: i, j
 
     do i = 1, nkoss
-        if(posx(i) < 0.00D0) then
-            posx(i) = posx(i) + xsyul
-        else if(posx(i) > xsyul) then
-            posx(i) = posx(i) - xsyul
-        endif
-
-        if(posy(i) < 0.00D0) then
-            posy(i) = posy(i) + ysyul
-        else if(posy(i) > ysyul) then
-            posy(i) = posy(i) - ysyul
-        endif
-
-        if(posz(i) < 0.00D0) then
-            posz(i) = posz(i) + zsyul
-        else if(posz(i) > zsyul) then
-            posz(i) = posz(i) - zsyul
-        endif
+        do j = 1, 3
+            if(pos(i, j) < 0.00D0) then
+                pos(i, j) = pos(i, j) + syul(j)
+            else if(pos(i, j) > syul(j)) then
+                pos(i, j) = pos(i, j) - syul(j)
+            endif
+        end do
     end do
 end subroutine calc_bound

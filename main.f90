@@ -1,6 +1,6 @@
 program main
 	use variables, only: nowstp
-    use parameters
+	use parameters
 	implicit none
 	integer :: i
 
@@ -19,7 +19,7 @@ program main
 	! 各分子の最終位置データの出力
 	!   open(10,file='finpos.dat')
 
-    nowstp = 0
+	nowstp = 0
 	
 	call initial ! 各分子の初期位置，初期速度などの設定
 	call correct_trspeed ! 系内の全分子の並進速度の補正
@@ -32,7 +32,7 @@ program main
 		nowstp = i
 		! ステップ数が500の倍数のとき
 		if (mod(nowstp,500) == 0) then
-			write(6,*) nowstp
+			write(6,*) nowstp ! ターミナルに進捗を出力
 		endif
 		! ステップ数が100の倍数のとき
 		if (mod(nowstp,100) == 0) then
@@ -41,7 +41,7 @@ program main
 			call correct_cogravity	! 系内の全分子の重心の補正
 		endif
 	
-		call calc_posvel ! 各分子に働く力，速度，位置の分子動力学計算
+		call calc_LeapFlog ! 各分子に働く力，速度，位置の分子動力学計算
 		call calc_bound ! 境界条件の付与
 		
 		! ステップ数が100の倍数+1のとき

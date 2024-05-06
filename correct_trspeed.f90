@@ -1,27 +1,18 @@
 subroutine correct_trspeed
-    use variables, only: velx, vely, velz
+    use variables
     use parameters
     implicit none
-    double precision :: trvx, trvy, trvz
-    integer :: i, j
-
-    trvx = 0.0d0
-    trvy = 0.0d0
-    trvz = 0.0d0
+    double precision, dimension(3) :: trv = 0.00000D0
+    integer :: i
 
     do i = 1, nkoss
-        trvx = trvx + velx(i)
-        trvy = trvy + vely(i)
-        trvz = trvz + velz(i)
+        trv(:) = trv(:) + vel(i,:)
+        !write(6,*) "trv: ", trv(1), trv(2), trv(3)
     end do
 
-    trvx = trvx / nkoss
-    trvy = trvy / nkoss
-    trvz = trvz / nkoss
+    trv(:) = trv(:) / nkoss
 
-    do j = 1, nkoss
-        velx(j) = velx(j) - trvx
-        vely(j) = vely(j) - trvy
-        velz(j) = velz(j) - trvz
+    do i = 1, nkoss
+        vel(i,:) = vel(i,:) - trv(:)
     end do
 end subroutine correct_trspeed

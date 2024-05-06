@@ -1,11 +1,11 @@
 subroutine record_posvel
-    use variables, only: posx, posy, posz, velx, vely, velz
+    use variables
     use parameters
     implicit none
     integer :: i
     do i = 1, nkoss
-        write(3, '(I6, 3D15.7)') i, posx(i), posy(i), posz(i)
-        write(4, '(I6, 3D15.7)') i, velx(i), vely(i), velz(i)
+        write(3, '(I6, 3E15.7)') i, pos(i,1), pos(i,2), pos(i,3)
+        write(4, '(I6, 3E15.7)') i, vel(i,1), vel(i,2), vel(i,3)
     end do
 end subroutine record_posvel
 
@@ -27,7 +27,7 @@ subroutine record_energy
         totkin = totkin + ukine(i)
     end do
 
-    ! エネルギーを大きな数で割る処理（正規化や単位変換のため）
+    ! 無次元化
     totpot = totpot / 1.00d16
     totkin = totkin / 1.00d16
     totene = totpot + totkin
@@ -35,15 +35,16 @@ subroutine record_energy
     ! 温度計算
     temp = 2.0d0 * totkin / (3.0d0 * dble(nkoss) * boltz)
 
-    write(7, '(4D15.7)') totene, totpot, totkin, temp
+    write(7, '(4E15.7)') totene, totpot, totkin, temp
 end subroutine record_energy
 
 subroutine record_finposvel
-    use variables, only: posx, posy, posz, velx, vely, velz
+    use variables
     use parameters
     implicit none
     integer :: i
+
     do i = 1, nkoss
-        write(9, '(I6, 6D15.7)') i, posx(i), posy(i), posz(i), velx(i), vely(i), velz(i)
+        write(9, '(I6, 6E15.7)') i, pos(i,1), pos(i,2), pos(i,3), vel(i,1), vel(i,2), vel(i,3)
     end do
 end subroutine record_finposvel
