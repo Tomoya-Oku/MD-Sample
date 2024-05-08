@@ -1,17 +1,30 @@
-subroutine calc_ac(posx, posy, posz)
-    new_acc = acc + vel
-    return new_acc
-end subroutine calc_ac
+function search_prox(obj) result(prox)
+    use variables
+    use parameters
+    implicit none
+    integer :: i, prox
+    integer, allocatable :: min_is(:)
+    double precision, dimension(3), intent(in) :: obj
+    double precision, dimension(nkoss) :: distance
+
+    ! positionから一番近い分子を探す
+    do i = 1, nkoss
+        distance(i) = (pos(i,1) - obj(1))**2 + (pos(i,2) - obj(2))**2 + (pos(i,3) - obj(3))**2
+    end do
+
+    min_is = minloc(distance)
+    prox = min_is(1)
+end function
 
 subroutine calc_RK4
     use variables
     use parameters
     implicit none
-    integer :: i
+    integer :: i, j, prox, search_prox
     double precision :: vene
+    double precision, dimension(3) :: venes
     double precision, dimension(nkoss, 4, 3) :: k_pos
     double precision, dimension(nkoss, 4, 3) :: k_vel
-    double precision :: acc(nkoss, 3) ! acceleration
 
     ! 初期化
     for(:,:) = 0.0000D0
@@ -28,23 +41,20 @@ subroutine calc_RK4
         ukine(i) = 0.500D0 * zmass * vene
     end do
 
-    ! 力を加速度に
-    do i = 1, nkoss
-        acc(i,:) = for(i,:)
-    end do
-
     ! RK4 Method
     do i = 1, nkoss
         k_pos(i, 1, :) = pos(i, :) + vel(i, :)*dt
-        k_vel(i, 1, :) = vel(i, :) + calc_ac(pos)*dt
+        prox = search_prox(pos(i, :))
+        k_vel(i, 1, :) = vel(i, :) + for(prox, :)*dt
 
         do j = 2,4
             k_pos(i, j, :) = pos(i, :) + (vel(i,:) + k_vel(i, j-1, :)) * 0.500D0 * dt
-            k_vel(i, j, :) = vel(i, :) + calc_ac((pos + k_pos(i, j-1, :)) * 0.500D0) * dt
+            prox = search_prox((pos(i,:) + k_pos(i, j-1, :)) * 0.500D0)
+            k_vel(i, j, :) = vel(i, :) + for(prox,:) * dt
         end do
 
-        pos(i,:) = (1/6) * (2*k_pos(i, 1, :) + k_pos(i, 2, :) + k_pos(i, 3, :) + 2*k_pos(i, 4, :))
-        vel(i,:) = (1/6) * (2*k_vel(i, 1, :) + k_vel(i, 2, :) + k_vel(i, 3, :) + 2*k_vel(i, 4, :))
+        pos(i,:) = dble(1.0/6.0) * (2*k_pos(i, 1, :) + k_pos(i, 2, :) + k_pos(i, 3, :) + 2*k_pos(i, 4, :))
+        vel(i,:) = dble(1.0/6.0) * (2*k_vel(i, 1, :) + k_vel(i, 2, :) + k_vel(i, 3, :) + 2*k_vel(i, 4, :))
     end do
 
 end subroutine calc_RK4

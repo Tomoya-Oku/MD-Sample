@@ -13,4 +13,5 @@ module parameters
     double precision, parameter :: boltz = 1.3806662D-23 !ボルツマン定数
     double precision, parameter :: pi = 3.141592654D0 !円周率
     double precision, parameter :: dt = 5.00D0 !無次元時間ステップ(無次元，有次元の場合fs)
+    integer, parameter :: trnum = 32 ! トラッキングする分子の番号
 end module parameters

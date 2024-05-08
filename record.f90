@@ -1,3 +1,11 @@
+subroutine record_tracking
+    use variables
+    use parameters
+    implicit none
+
+    write(11, '(I6, 6E15.7)') nowstp, pos(trnum,1), pos(trnum,2), pos(trnum,3), vel(trnum,1), vel(trnum,2), vel(trnum,3)
+end subroutine record_tracking
+
 subroutine record_posvel
     use variables
     use parameters
