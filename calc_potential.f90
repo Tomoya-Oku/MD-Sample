@@ -7,6 +7,9 @@ subroutine calc_potential
     double precision :: dit2, dit4, dit6, dit8, dit12, dit14
     double precision, dimension(3) :: divs, forces
 
+    for(:,:) = 0.0000D0
+    poten(:) = 0.0000D0
+
     do i1 = 1, nkoss
         LP1:do i2 = i1+1, nkoss
                 divs(:) = pos(i1, :) - pos(i2, :)

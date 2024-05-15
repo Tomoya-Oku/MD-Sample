@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
 
 #おぬしの設定によって書き換えるのじゃ！############################################################
-N = 800 # グラフの分割数
-nkoss = 1024 # 分子数
+N = 700 # グラフの分割数
+nkoss = 128 # 分子数
 T = 300 # 温度[K]
-boundary_step = 20000 #温度補正を止めたステップ数
+boundary_step = 10000 #温度補正を止めたステップ数
 xlim = 800 # x軸の最大値
 ylim = 0.005 # y軸の最大値
 ###################################################################################################
@@ -27,7 +27,7 @@ def Maxwell_distribution(velocity_array):
     return p
 
 def main():
-    input_dat = pd.read_table("veloc.dat",header=None, delim_whitespace=True)
+    input_dat = pd.read_table("velocity.dat",header=None, delim_whitespace=True)
 
     start = int(nkoss*(boundary_step/100)-1)
 

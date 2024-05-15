@@ -23,10 +23,8 @@ subroutine initial
     
     do k=1,4
         xyz(3) = ofst1(3) + dble(k-1)*stdist/2.0D0
-        !write(6,*) 'xyz(3): ', xyz(3)
         do i=1,4
             xyz(1) = ofst1(1) + dble(i-1)*stdist/2.0D0
-            !write(6,*) 'xyz(1): ', xyz(1)
             do j=1,4
                 ! iとkの偶奇が一致する
                 if(mod(k,2) == mod(i,2)) then
@@ -34,7 +32,6 @@ subroutine initial
                 else
                     xyz(2) = ofst1(2) + dble(j-1)*stdist + stdist/2.0D0
                 endif
-                !write(6,*) 'xyz(2): ', xyz(2)
                 num = num + 1
                 pos(num, :) = xyz(:)
             end do

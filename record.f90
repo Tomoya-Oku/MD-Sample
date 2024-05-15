@@ -1,10 +1,10 @@
-subroutine record_tracking
+subroutine record_pressure
     use variables
     use parameters
     implicit none
 
-    write(11, '(I6, 6E15.7)') nowstp, pos(trnum,1), pos(trnum,2), pos(trnum,3), vel(trnum,1), vel(trnum,2), vel(trnum,3)
-end subroutine record_tracking
+    write(11, '(I6, E15.7)') nowstp, pressure
+end subroutine record_pressure
 
 subroutine record_posvel
     use variables

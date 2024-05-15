@@ -3,6 +3,7 @@ program main
     use parameters
     implicit none
     integer :: i
+    integer :: stop_step = 20000
 
     ! 読み込み用乱数ファイル
         open(1,file='random1.dat')
@@ -35,13 +36,15 @@ program main
         !call record_tracking
         ! ステップ数が500の倍数のとき
         if (mod(nowstp,500) == 0) then
-            write(6,*) nowstp ! ターミナルに進捗を出力
+            write(6,*) nowstp, "/", maxstep ! ターミナルに進捗を出力
         endif
-        ! ステップ数が100の倍数のとき
-        if (mod(nowstp,100) == 0) then
-            call correct_trspeed ! 系内の全分子の温度の補正
-            call correct_temp ! 系内の全分子の温度の補正
-            call correct_cogravity ! 系内の全分子の重心の補正
+        if (nowstp <= stop_step) then
+            ! ステップ数が100の倍数のとき
+            if (mod(nowstp,100) == 0) then
+                call correct_trspeed ! 系内の全分子の温度の補正
+                call correct_temp ! 系内の全分子の温度の補正
+                call correct_cogravity ! 系内の全分子の重心の補正
+            endif
         endif
     
         call calc_RK4 ! 各分子に働く力，速度，位置の分子動力学計算

@@ -3,10 +3,12 @@ from matplotlib.ticker import ScalarFormatter
 import pandas as pd
 import numpy as np
 
+maxstep = 20000
+
 def main():
     input_dat = pd.read_table("energy.dat",header=None, delim_whitespace=True)
 
-    time = np.arange(0, 20001, 100)
+    time = np.arange(0, maxstep+1, 100)
     tote = input_dat[input_dat.keys()[0]]
     pote = input_dat[input_dat.keys()[1]]
     kine = input_dat[input_dat.keys()[2]]
