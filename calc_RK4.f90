@@ -31,25 +31,20 @@ subroutine calc_RK4
 
     ! RK4 Method
     do i = 1, nkoss
-        !k_pos(i, 1, :) = pos_original(i, :) + vel(i, :)*dt
         k_pos(i, 1, :) = vel(i, :)
-        !k_vel(i, 1, :) = vel(i, :) + for(i, :)*dt
         k_vel(i, 1, :) = for(i, :)
     end do
 
     do j = 2, 3
         ! 加速度算出用に(x(t)+x^(k))/2を作る
         do i = 1, nkoss
-            !pos(i,:) = (pos_original(i,:) + k_pos(i, j-1, :)) * 0.500D0
             pos(i,:) = pos_original(i,:) + k_pos(i, j-1, :) * 0.500D0 * dt
         end do
 
         call calc_potential
     
         do i = 1, nkoss
-            !k_pos(i, j, :) = pos_original(i, :) + (vel(i, :) + k_vel(i, j-1, :)) * 0.500D0 * dt
             k_pos(i, j, :) = vel(i,:) + k_vel(i,j-1,:) * 0.500D0 * dt
-            !k_vel(i, j, :) = vel(i, :) + for(i, :) * dt
             k_vel(i, j, :) = for(i, :)
         end do
     end do
@@ -68,9 +63,7 @@ subroutine calc_RK4
 
     ! Result
     do i = 1, nkoss
-        !pos(i,:) = dble(1.0D0/6.0D0) * (2.0D0*k_pos(i, 1, :) + k_pos(i, 2, :) + k_pos(i, 3, :) + 2.0D0*k_pos(i, 4, :))
         pos(i,:) = pos_original(i,:) + (dt/6.0D0) * (k_pos(i, 1, :) + 2.0*k_pos(i, 2, :) + 2.0*k_pos(i, 3, :) + k_pos(i, 4, :))
-        !vel(i,:) = dble(1.0D0/6.0D0) * (2.0D0*k_vel(i, 1, :) + k_vel(i, 2, :) + k_vel(i, 3, :) + 2.0D0*k_vel(i, 4, :))
         vel(i,:) = vel(i,:) + (dt/6.0D0) * (k_vel(i, 1, :) + 2.0*k_vel(i, 2, :) + 2.0*k_vel(i, 3, :) + k_vel(i, 4, :))
     end do
 
